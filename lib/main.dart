@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:perpet/screens/main_screen.dart';
+import 'package:perpet/screens/login_screen.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       //실행 시키면 가장 먼저 보이는 화면
       //home: const LoginScreen(),
-      home: const MainScreen(),
+      home: const LoginScreen(),
     );
   }
 }
