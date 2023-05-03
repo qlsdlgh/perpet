@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:perpet/screens/IoT_feed_screen.dart';
 import 'package:perpet/screens/IoT_water_screen.dart';
 import 'package:perpet/screens/community_screen.dart';
-import 'package:perpet/screens/diary_calender_screen.dart';
 import 'package:perpet/screens/myPage_screen.dart';
 import 'package:perpet/screens/home_screen.dart';
 import 'package:perpet/screens/login_screen.dart';
@@ -109,7 +108,6 @@ class _MainScreenState extends State<MainScreen> {
     const SignUpPetScreen(),
     //const WriteScreen(),
     const HomeScreen(),
-    const DiaryScreen(),
     const IoTFeedScreen(),
     const IoTWaterScreen(),
     const IoTCamScreen(),
@@ -186,13 +184,7 @@ class _MainScreenState extends State<MainScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: MaterialButton(
                       minWidth: 60,
-                      onPressed: () {
-                        //버튼 눌렀을 때 작동하는 코드
-                        setState(() {
-                          currentScreen = const DiaryScreen();
-                          currentTab = 1;
-                        });
-                      },
+                      onPressed: () {},
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:perpet/screens/diary_calender_screen.dart';
 
 class PostWriteScreen extends StatefulWidget {
   const PostWriteScreen({super.key});
