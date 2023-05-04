@@ -1,16 +1,16 @@
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:perpet/kakao/social_login.dart';
+import 'package:perpet/service/social_login.dart';
 
 class KakaoLogin implements SocialLogin {
   @override
-  Future<bool> login() async{
+  Future<bool> login() async {
     try {
       bool isInstalled = await isKakaoTalkInstalled();
       if (isInstalled) {
         try {
           await UserApi.instance.loginWithKakaoTalk();
           return true;
-        } catch(e){
+        } catch (e) {
           return false;
         }
       } else {
@@ -28,12 +28,11 @@ class KakaoLogin implements SocialLogin {
 
   @override
   Future<bool> logout() async {
-    try{
+    try {
       await UserApi.instance.unlink();
       return true;
-    } catch (error){
+    } catch (error) {
       return false;
     }
-
   }
 }

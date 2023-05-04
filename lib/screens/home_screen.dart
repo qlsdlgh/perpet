@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:perpet/widgets/button_style.dart';
+import 'package:perpet/service/main_view_model.dart';
+//import 'package:perpet/widgets/button_style.dart';
 
 //로그인 후 보이는 첫화면
 class HomeScreen extends StatelessWidget {
@@ -28,8 +29,9 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: const SingleChildScrollView(
+        child:
+            LoginKakao(), /*Padding(
             padding: const EdgeInsets.all(25),
             child: Column(
               children: [
@@ -206,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ],
-            )),
+            )),*/
       ),
     );
   }

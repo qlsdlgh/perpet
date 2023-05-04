@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 // import 'package:perpet/screens/login_screen.dart';
 import 'package:perpet/screens/main_screen.dart';
 
-void main() async {
+void main() {
+  KakaoSdk.init(nativeAppKey: '837a0a9f64bb0ab3fec2c0f449d4ea2e');
   runApp(const MyApp());
 }
 
