@@ -44,42 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCUgGGWfKeSJLmJFBkDtRTFlro7wrrpvY0',
-    appId: '1:980640668438:web:10cc030b00636857a88e37',
-    messagingSenderId: '980640668438',
-    projectId: 'perpet-e4923',
-    authDomain: 'perpet-e4923.firebaseapp.com',
-    storageBucket: 'perpet-e4923.appspot.com',
-    measurementId: 'G-2MFNQCXY9D',
+    apiKey: 'AIzaSyAg-ugIl6Kt7X0MtWPFzozptlUlfVIxstg',
+    appId: '1:511385905702:web:7884f04e1d40a9731f14e7',
+    messagingSenderId: '511385905702',
+    projectId: 'perpet-51119',
+    authDomain: 'perpet-51119.firebaseapp.com',
+    storageBucket: 'perpet-51119.appspot.com',
+    measurementId: 'G-G10HZX6GYT',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDGe6f9Pm4KObK-YUl36Fiid4JZKnWNcs4',
-    appId: '1:980640668438:android:1eefd88cbb232ba3a88e37',
-    messagingSenderId: '980640668438',
-    projectId: 'perpet-e4923',
-    storageBucket: 'perpet-e4923.appspot.com',
+    apiKey: 'AIzaSyBrUwWkxL8dtxXiNNttooze2rNPUHEbv9M',
+    appId: '1:511385905702:android:9e28c1524afd8f871f14e7',
+    messagingSenderId: '511385905702',
+    projectId: 'perpet-51119',
+    storageBucket: 'perpet-51119.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDI7G_qfqoWRbHlYK_f51Tza-ppdsFShFw',
-    appId: '1:980640668438:ios:c1e7fa5410d57441a88e37',
-    messagingSenderId: '980640668438',
-    projectId: 'perpet-e4923',
-    storageBucket: 'perpet-e4923.appspot.com',
-    iosClientId:
-        '980640668438-m01a23oe03k1jbh8mj81lsh0unkbni75.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDJHLqwyp4A4OBO8NF7GN6gguBDmTaC-ZI',
+    appId: '1:511385905702:ios:71ce24f58b914bdf1f14e7',
+    messagingSenderId: '511385905702',
+    projectId: 'perpet-51119',
+    storageBucket: 'perpet-51119.appspot.com',
+    iosClientId: '511385905702-hl5mhscvhv54klvq6s1vdllvevhs81gp.apps.googleusercontent.com',
     iosBundleId: 'com.example.perpet',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDI7G_qfqoWRbHlYK_f51Tza-ppdsFShFw',
-    appId: '1:980640668438:ios:c1e7fa5410d57441a88e37',
-    messagingSenderId: '980640668438',
-    projectId: 'perpet-e4923',
-    storageBucket: 'perpet-e4923.appspot.com',
-    iosClientId:
-        '980640668438-m01a23oe03k1jbh8mj81lsh0unkbni75.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDJHLqwyp4A4OBO8NF7GN6gguBDmTaC-ZI',
+    appId: '1:511385905702:ios:71ce24f58b914bdf1f14e7',
+    messagingSenderId: '511385905702',
+    projectId: 'perpet-51119',
+    storageBucket: 'perpet-51119.appspot.com',
+    iosClientId: '511385905702-hl5mhscvhv54klvq6s1vdllvevhs81gp.apps.googleusercontent.com',
     iosBundleId: 'com.example.perpet',
   );
 }

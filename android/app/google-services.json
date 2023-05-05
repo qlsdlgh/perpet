@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "980640668438",
-    "project_id": "perpet-e4923",
-    "storage_bucket": "perpet-e4923.appspot.com"
+    "project_number": "511385905702",
+    "project_id": "perpet-51119",
+    "storage_bucket": "perpet-51119.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:980640668438:android:1eefd88cbb232ba3a88e37",
+        "mobilesdk_app_id": "1:511385905702:android:9e28c1524afd8f871f14e7",
         "android_client_info": {
           "package_name": "com.example.perpet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "980640668438-6ipbjuouv24r4pkkcq8rnh3gdkos77dv.apps.googleusercontent.com",
+          "client_id": "511385905702-pudlvc3nfa2gumkvmn100020aps6qad7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDGe6f9Pm4KObK-YUl36Fiid4JZKnWNcs4"
+          "current_key": "AIzaSyBrUwWkxL8dtxXiNNttooze2rNPUHEbv9M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "980640668438-6ipbjuouv24r4pkkcq8rnh3gdkos77dv.apps.googleusercontent.com",
+              "client_id": "511385905702-pudlvc3nfa2gumkvmn100020aps6qad7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
