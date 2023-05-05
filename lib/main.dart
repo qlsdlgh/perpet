@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
 // import 'package:perpet/screens/login_screen.dart';
 import 'package:perpet/screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  KakaoSdk.init(nativeAppKey: '837a0a9f64bb0ab3fec2c0f449d4ea2e');
+  kakao.KakaoSdk.init(nativeAppKey: '837a0a9f64bb0ab3fec2c0f449d4ea2e');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

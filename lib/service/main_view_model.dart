@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
+import 'package:perpet/service/firebase_auth_remote_data_source.dart';
 import 'package:perpet/service/kakao_login.dart';
 import 'package:perpet/service/social_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainViewModel {
+  final _firebaseAuthDataSource = FirebaseAuthRemoteDataSource();
   final SocialLogin _socialLogin;
   bool isLogined = false;
-  User? user;
+  kakao.User? user;
 
   MainViewModel(this._socialLogin);
 
   Future login() async {
     isLogined = await _socialLogin.login();
     if (isLogined) {
-      user = await UserApi.instance.me();
+      user = await kakao.UserApi.instance.me();
+
+      final token = await _firebaseAuthDataSource.createCustomToken({
+        'uid': user!.id.toString(),
+        'displayName': user!.kakaoAccount!.profile!.nickname,
+        'email': user!.kakaoAccount!.email!,
+        'photoURL': user!.kakaoAccount!.profile!.profileImageUrl!,
+      });
+
+      await FirebaseAuth.instance.signInWithCustomToken(token);
     }
   }
 
   Future logout() async {
     await _socialLogin.logout();
+    await FirebaseAuth.instance.signOut();
     isLogined = false;
     user = null;
   }
@@ -37,28 +50,38 @@ class _LoginKakaoState extends State<LoginKakao> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          Image.network(viewModel
-                  .user?.kakaoAccount?.profile?.profileImageUrl ??
-              'https://img.danawa.com/prod_img/500000/445/387/img/16387445_1.jpg?shrink=330:*&_v=20220325175050'),
-          Text('${viewModel.isLogined}'),
-          ElevatedButton(
-            onPressed: () async {
-              await viewModel.login();
-              setState(() {});
-            },
-            child: const Text('Login'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await viewModel.logout();
-              setState(() {});
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
+      child: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return ElevatedButton(
+                onPressed: () async {
+                  await viewModel.login();
+                  setState(() {});
+                },
+                child: const Text('Login'),
+              );
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.network(
+                    viewModel.user?.kakaoAccount?.profile?.profileImageUrl ??
+                        ''),
+                Text(
+                  '${viewModel.isLogined}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await viewModel.logout();
+                    setState(() {});
+                  },
+                  child: const Text('Logout'),
+                ),
+              ],
+            );
+          }),
     );
   }
 }
