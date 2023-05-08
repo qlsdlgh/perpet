@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:perpet/screens/IoT_feed_screen.dart';
 import 'package:perpet/screens/IoT_water_screen.dart';
 import 'package:perpet/screens/community_screen.dart';
-import 'package:perpet/screens/myPage_screen.dart';
+import 'package:perpet/screens/setting_page.dart';
 import 'package:perpet/screens/home_screen.dart';
 import 'package:perpet/screens/login_screen.dart';
 import 'package:perpet/screens/sign_up_pet_screen.dart';
@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
     const IoTWaterScreen(),
     const IoTCamScreen(),
     const CommunityScreen(),
-    const myPageScreen(),
+    const SettingPage(),
   };
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -230,7 +230,7 @@ class _MainScreenState extends State<MainScreen> {
                       onPressed: () {
                         //버튼 눌렀을 때 작동하는 코드
                         setState(() {
-                          currentScreen = const myPageScreen();
+                          currentScreen = const SettingPage();
                           currentTab = 3;
                         });
                       },
