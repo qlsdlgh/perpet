@@ -107,7 +107,7 @@ def Control_Rpi(data):
         servo_bottom.ChangeDutyCycle(2)
     elif data == "SOUND":  # 스피커 녹음 재생, 전송받은 스피커 소리 정보를 출력해주기.
         sound = client_socket.recv(1024)
-        Play_audio(sound)
+        Play_Audio(sound)
     #    elif data == "WATER": # 솔레노이드 밸브 작동 (시간단위)
     # 솔레노이드 밸브 사용
 
