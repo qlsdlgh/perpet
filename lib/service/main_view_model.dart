@@ -21,7 +21,7 @@ class MainViewModel {
       final token = await _firebaseAuthDataSource.createCustomToken({
         'uid': user!.id.toString(),
         'displayName': user!.kakaoAccount!.profile!.nickname,
-        'email': user!.kakaoAccount!.email!,
+        //'email': 'user!.kakaoAccount!.email!',//
         'photoURL': user!.kakaoAccount!.profile!.profileImageUrl!,
       });
 
@@ -54,14 +54,18 @@ class _LoginKakaoState extends State<LoginKakao> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return ElevatedButton(
-                onPressed: () async {
+              return GestureDetector(
+                onTap: () async {
                   await viewModel.login();
                   setState(() {});
                 },
-                child: const Text('Login'),
+                child: Image.asset(
+                  'assets/kakaologin.png',
+                  width: 450,
+                ),
               );
             }
+            // 로그인 확인용. DB 구축 되면 로그인 후 나타날 코드 작성
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
