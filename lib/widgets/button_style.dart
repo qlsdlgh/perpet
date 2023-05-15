@@ -45,3 +45,37 @@ class QuickButton extends StatelessWidget {
     );
   }
 }
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final Color bgColor;
+  final Color textColor;
+
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.bgColor,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            color: bgColor, borderRadius: BorderRadius.circular(15.0)),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+}

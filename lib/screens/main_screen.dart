@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:perpet/screens/IoT_feed_screen.dart';
 import 'package:perpet/screens/IoT_water_screen.dart';
 import 'package:perpet/screens/community_screen.dart';
+import 'package:perpet/screens/map_screen.dart';
 import 'package:perpet/screens/setting_page.dart';
 import 'package:perpet/screens/home_screen.dart';
 import 'package:perpet/screens/login_screen.dart';
-import 'package:perpet/screens/sign_up_pet_screen.dart';
-import 'package:perpet/screens/sign_up_user_screen.dart';
 
 import 'IoT_cam_screen.dart';
 
@@ -104,9 +102,6 @@ class _MainScreenState extends State<MainScreen> {
 
   final Set<Widget> screens = {
     const LoginScreen(),
-    const SignUpUserScreen(),
-    const SignUpPetScreen(),
-    //const WriteScreen(),
     const HomeScreen(),
     const IoTFeedScreen(),
     const IoTWaterScreen(),
@@ -127,10 +122,11 @@ class _MainScreenState extends State<MainScreen> {
         bucket: bucket,
         child: currentScreen,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink[100],
-        splashColor: Colors.pink[50],
-        child: const Icon(Icons.ac_unit_outlined),
+      floatingActionButton: FloatingActionButton.large(
+        backgroundColor: Colors.white.withOpacity(0),
+        splashColor: Colors.white.withOpacity(0),
+        elevation: 0,
+        child: Image.asset('assets/icons/iot_button.png'),
         onPressed: () {
           setState(() {
             alignment = alignment == Alignment.bottomLeft
@@ -144,109 +140,118 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         //플로팅 버튼을 제외한 바텀네비게이션바
-        color: Colors.pink[100],
+        color: Colors.white,
         shape: const CircularNotchedRectangle(),
-        notchMargin: 10,
+        notchMargin: 0,
         child: SizedBox(
           height: 60,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  //padding하나가 하나의 버튼
-                  Padding(
-                    //버튼 사이 간격 조절
-                    padding: const EdgeInsets.all(8.0),
-                    child: MaterialButton(
-                      minWidth: 60,
-                      onPressed: () {
-                        //버튼 눌렀을 때 작동하는 코드
-                        setState(() {
-                          currentScreen = const HomeScreen();
-                          currentTab = 0;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.home,
-                            color:
-                                currentTab == 0 ? Colors.white : Colors.white54,
-                          ),
-                        ],
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      currentScreen = const HomeScreen();
+                      currentTab = 0;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      currentTab == 0
+                          ? Image.asset('assets/icons/home_icon_clicked.png')
+                          : Image.asset('assets/icons/home_icon.png'),
+                      const Text(
+                        '홈',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MaterialButton(
-                      minWidth: 60,
-                      onPressed: () {},
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.book,
-                            color:
-                                currentTab == 1 ? Colors.white : Colors.white54,
-                          ),
-                        ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      currentScreen = const MapScreen();
+                      currentTab = 1;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      currentTab == 1
+                          ? Image.asset(
+                              'assets/icons/map-pin-fill.png',
+                            )
+                          : Image.asset('assets/icons/map-pin-line.png'),
+                      const Text(
+                        '지도',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 30)),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MaterialButton(
-                      minWidth: 60,
-                      onPressed: () {
-                        //버튼 눌렀을 때 작동하는 코드
-                        setState(() {
-                          currentScreen = const CommunityScreen();
-                          currentTab = 2;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.comment,
-                            color:
-                                currentTab == 2 ? Colors.white : Colors.white54,
-                          ),
-                        ],
+                ),
+              ),
+              const SizedBox(),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      currentScreen = const CommunityScreen();
+                      currentTab = 2;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      currentTab == 2
+                          ? Image.asset(
+                              'assets/icons/community_icon_clicked.png',
+                            )
+                          : Image.asset('assets/icons/community_icon.png'),
+                      const Text(
+                        '커뮤니티',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MaterialButton(
-                      minWidth: 60,
-                      onPressed: () {
-                        //버튼 눌렀을 때 작동하는 코드
-                        setState(() {
-                          currentScreen = const SettingPage();
-                          currentTab = 3;
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.user,
-                            color:
-                                currentTab == 3 ? Colors.white : Colors.white54,
-                          ),
-                        ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      currentScreen = const SettingPage();
+                      currentTab = 3;
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      currentTab == 3
+                          ? const Icon(Icons.person_3_outlined)
+                          : const Icon(Icons.person_3), // 아이콘 수정 필요
+                      const Text(
+                        '마이페이지',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               )
             ],
           ),

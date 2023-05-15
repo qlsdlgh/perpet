@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:perpet/postcard.dart';
 import 'package:perpet/screens/posting_community.dart';
 
-class CommunityScreen extends StatelessWidget {
+class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
-//커뮤니티 화면
-  //제대로 작동하기 전이다.
+
+  @override
+  State<CommunityScreen> createState() => _CommunityScreenState();
+}
+
+class _CommunityScreenState extends State<CommunityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +34,10 @@ class CommunityScreen extends StatelessWidget {
       ),
       body: Container(
         child: ListView(
-          children: <Widget>[
+          children: const <Widget>[
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
+              children: <Widget>[
                 //시험용으로 넣어둔 카드
                 //나중엔 포스팅 된 게시물 수 만큼 출력되도록 한다.
                 //물 입력 화면에 주석으로 처리 된 코드 참고해서 만들기

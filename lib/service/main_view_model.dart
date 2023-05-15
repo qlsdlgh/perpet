@@ -69,9 +69,16 @@ class _LoginKakaoState extends State<LoginKakao> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.network(
-                    viewModel.user?.kakaoAccount?.profile?.profileImageUrl ??
-                        ''),
+                GestureDetector(
+                  onTap: () {
+                    //test();
+                    print(FirebaseAuth.instance.currentUser);
+                    setState(() {});
+                  },
+                  child: Image.network(viewModel
+                          .user?.kakaoAccount?.profile?.profileImageUrl ??
+                      'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcYrRtY%2FbtsepOePZ5e%2F1JWVU3kljK11r0peqoXacK%2Fimg.jpg'),
+                ),
                 Text(
                   '${viewModel.isLogined}',
                   style: Theme.of(context).textTheme.headlineMedium,
