@@ -6,6 +6,7 @@ import 'package:perpet/screens/map_screen.dart';
 import 'package:perpet/screens/setting_page.dart';
 import 'package:perpet/screens/home_screen.dart';
 import 'package:perpet/screens/login_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'IoT_cam_screen.dart';
 
@@ -16,6 +17,34 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  Widget currentScreen = const HomeScreen();
+  static const storage = FlutterSecureStorage();
+  dynamic userInfo = '';
+
+  readUserInfo() async {
+    userInfo = await storage.read(key: 'login');
+
+    if (userInfo != null) {
+      currentScreen = const HomeScreen();
+    } else {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    readUserInfo();
+    /* 
+    secretStorage에 현재 로그인한 회원 정보가 있으면 
+    currentScreen = const HomeScreen();,
+    회원 db 불러오기
+    없으면
+    currentScreen = const LoginScreen();
+    */
+  }
+
   void floatButtonBar() {
     //가운데 동그랗게 떠있는 버튼
     //사료, 물, 웹캠 버튼
@@ -111,7 +140,6 @@ class _MainScreenState extends State<MainScreen> {
   };
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = const HomeScreen();
 
   var alignment = Alignment.bottomLeft;
 
@@ -142,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
         //플로팅 버튼을 제외한 바텀네비게이션바
         color: Colors.white,
         shape: const CircularNotchedRectangle(),
-        notchMargin: 0,
+        notchMargin: -5,
         child: SizedBox(
           height: 60,
           child: Row(

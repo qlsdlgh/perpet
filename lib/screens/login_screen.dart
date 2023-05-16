@@ -13,31 +13,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LogInState extends State<LoginScreen> {
-  // FlutterSecureStorage를 storage로 저장
   dynamic userInfo = ''; // storage에 있는 유저 정보를 저장
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
-
-  _asyncMethod() async {
-    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-    // 데이터가 없을때는 null을 반환
-    userInfo = await storage.read(key: 'login');
-
-    /*
-    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-    if (userInfo != null) {
-      Navigator.pushNamed(context, '/home');
-    } else {
-      print('로그인이 필요합니다');
-    }
-    */
   }
 
   @override
@@ -82,7 +62,7 @@ class _LogInState extends State<LoginScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/home');
+                logoutKakao(); // 로그아웃 기능 테스트용
               },
               child: Image.asset(
                 'assets/googlelogin.png',
@@ -98,18 +78,20 @@ class _LogInState extends State<LoginScreen> {
 
 loginKakao() async {
   final viewModel = MainViewModel(KakaoLogin());
-  late final uid;
+  late final String uid;
 
   await viewModel.login();
-  /* secure storage에 login 정보 저장하는 부분
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  uid = FirebaseAuth.instance.currentUser?.uid;
 
-  if (currentUser != null) {
-    await storage.write(
-      key: 'login',
-      value: uid,
-    );
-  }
-  */
+  uid = FirebaseAuth.instance.currentUser!.uid;
+
+  await storage.write(
+    key: 'login',
+    value: uid,
+  );
+}
+
+logoutKakao() async {
+  final viewModel = MainViewModel(KakaoLogin());
+  await viewModel.logout();
+  await storage.delete(key: 'login');
 }

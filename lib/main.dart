@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/home': (context) => const HomeScreen(),
+        '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpPet(),
       },
       theme: ThemeData(
