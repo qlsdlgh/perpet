@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  table_calendar: ^3.0.9
   font_awesome_flutter: ^10.4.0
   intl: ^0.18.0
   image_picker: ^0.8.6+4
@@ -48,7 +47,8 @@ dependencies:
   flutter_svg: ^2.0.5
   flutter_secure_storage: ^8.0.0
   syncfusion_flutter_gauges: ^21.2.4
-  spincircle_bottom_bar: ^2.0.0
+  cloud_firestore: ^4.7.1
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +89,7 @@ flutter:
     - assets/icons/iot_button_clicked.png
     - assets/kakaologin.png
     - assets/googlelogin.png
+    - assets/email_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

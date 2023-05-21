@@ -5,8 +5,6 @@ import 'package:perpet/screens/community_screen.dart';
 import 'package:perpet/screens/map_screen.dart';
 import 'package:perpet/screens/setting_page.dart';
 import 'package:perpet/screens/home_screen.dart';
-import 'package:perpet/screens/login_screen.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'IoT_cam_screen.dart';
 
@@ -18,31 +16,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   Widget currentScreen = const HomeScreen();
-  static const storage = FlutterSecureStorage();
-  dynamic userInfo = '';
-
-  readUserInfo() async {
-    userInfo = await storage.read(key: 'login');
-
-    if (userInfo != null) {
-      currentScreen = const HomeScreen();
-    } else {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
-  }
+  final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   void initState() {
     super.initState();
-    readUserInfo();
-    /* 
-    secretStorage에 현재 로그인한 회원 정보가 있으면 
-    currentScreen = const HomeScreen();,
-    회원 db 불러오기
-    없으면
-    currentScreen = const LoginScreen();
-    */
   }
 
   void floatButtonBar() {
@@ -128,19 +106,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   int currentTab = 0;
-
-  final Set<Widget> screens = {
-    const LoginScreen(),
-    const HomeScreen(),
-    const IoTFeedScreen(),
-    const IoTWaterScreen(),
-    const IoTCamScreen(),
-    const CommunityScreen(),
-    const SettingPage(),
-  };
-
-  final PageStorageBucket bucket = PageStorageBucket();
-
   var alignment = Alignment.bottomLeft;
 
   @override

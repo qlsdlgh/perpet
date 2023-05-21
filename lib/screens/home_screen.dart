@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:perpet/widgets/button_style.dart';
 import 'package:perpet/screens/setting_page.dart';
 
@@ -12,9 +13,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
+  final storage = const FlutterSecureStorage();
+  dynamic userInfo = '';
+
+  readUserInfo() async {
+    userInfo = await storage.read(key: 'login');
+  }
 
   @override
   void initState() {
+    readUserInfo();
+    print('home screen userInfo: $userInfo');
     super.initState();
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {

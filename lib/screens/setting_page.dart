@@ -1,9 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,11 +89,16 @@ class SettingPage extends StatelessWidget {
                   width: 1.0,
                 ))),
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: Text(
-                  '로그아웃',
-                  style: TextStyle(
-                    color: Colors.black.withOpacity(0.5),
-                    fontSize: 22,
+                child: GestureDetector(
+                  onTap: () {
+                    logout();
+                  },
+                  child: Text(
+                    '로그아웃',
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.5),
+                      fontSize: 22,
+                    ),
                   ),
                 ),
               ),
@@ -95,6 +107,16 @@ class SettingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      Fluttertoast.showToast(msg: '로그아웃');
+    } catch (e) {
+      print('로그아웃 중 오류 발생: $e');
+    }
   }
 }
 
