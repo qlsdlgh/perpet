@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:perpet/screens/home_screen.dart';
+import 'package:perpet/screens/sign_up_pet_screen.dart';
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
@@ -11,9 +12,11 @@ class EmailSignUp extends StatefulWidget {
 }
 
 class _EmailSignUpState extends State<EmailSignUp> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
   bool isEmailError = false, isPassError = false;
   String emailError = '', passError = '';
 
@@ -29,11 +32,20 @@ class _EmailSignUpState extends State<EmailSignUp> {
       // 회원가입 성공
       isEmailError = false;
       isPassError = false;
-      Fluttertoast.showToast(msg: '로그인 성공');
+      Fluttertoast.showToast(msg: '회원가입 성공');
+
+      final currentUser = _auth.currentUser;
+      saveUserInfo(currentUser!.uid, currentUser.email.toString(),
+          currentUser.email.toString());
+
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(
+              builder: (context) => SignUpPet(
+                    currentUser: currentUser,
+                  )),
           (route) => false);
+
       setState(() {});
     } on FirebaseAuthException catch (e) {
       // 회원가입 실패
@@ -59,6 +71,12 @@ class _EmailSignUpState extends State<EmailSignUp> {
         print('회원가입 실패: $e');
       }
     }
+  }
+
+  void saveUserInfo(String uid, String email, String nickname) {
+    firestore.collection('users').doc(uid).set({
+      'email': email,
+    });
   }
 
   @override

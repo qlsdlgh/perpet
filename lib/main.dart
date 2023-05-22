@@ -7,7 +7,6 @@ import 'package:perpet/screens/home_screen.dart';
 import 'package:perpet/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:perpet/screens/main_screen.dart';
-import 'package:perpet/screens/sign_up_pet_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -52,7 +51,6 @@ class _MyAppState extends State<MyApp> {
         '/home': (context) => const HomeScreen(),
         '/main': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignUpPet(),
         '/email': (context) => const EmailLogin(),
         '/emailSignup': (context) => const EmailSignUp(),
       },
@@ -64,9 +62,6 @@ class _MyAppState extends State<MyApp> {
           iconTheme: IconThemeData(color: Colors.black),
         ),
       ),
-      // 로그인 정보 인증되면 MainScreen();
-      //home: const MainScreen(),
-      //home: Container(color: Colors.white, child: const LoginKakao()),
       home: _currentUser != null ? const MainScreen() : const LoginScreen(),
     );
   }

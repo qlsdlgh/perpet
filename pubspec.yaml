@@ -49,6 +49,7 @@ dependencies:
   syncfusion_flutter_gauges: ^21.2.4
   cloud_firestore: ^4.7.1
   fluttertoast: ^8.2.1
+  firebase_database: ^10.2.1
 
 dev_dependencies:
   flutter_test:
