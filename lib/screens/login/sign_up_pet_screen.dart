@@ -21,9 +21,11 @@ class _SignUpPetState extends State<SignUpPet> {
       required String petType,
       required String petName,
       required String petAge,
+      required String petWeight,
       required String petSex}) async {
     await firestore.collection('users').doc(uid).set({
       'nickname': nickname,
+      'email': widget.currentUser.email,
     });
 
     await firestore
@@ -33,9 +35,12 @@ class _SignUpPetState extends State<SignUpPet> {
         .doc('$petName$uid')
         .set({
       'is_main': true,
+      'petImage':
+          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbRHwqW%2FbtshaszemDc%2FbPQFunfimkFbsCksNzcPqK%2Fimg.png',
       'petType': petType,
       'petName': petName,
       'petAge': petAge,
+      'petWeight': petWeight,
       'petSex': petSex,
     });
   }
@@ -46,6 +51,7 @@ class _SignUpPetState extends State<SignUpPet> {
   final TextEditingController _nickNameController = TextEditingController();
   final TextEditingController _petNameController = TextEditingController();
   final TextEditingController _petAgeController = TextEditingController();
+  final TextEditingController _petWeightController = TextEditingController();
 
   String _selectedPetType = '';
   bool _isDogSelect = false;
@@ -299,6 +305,46 @@ class _SignUpPetState extends State<SignUpPet> {
                     const SizedBox(
                       height: 30,
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '반려동물 몸무게',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: _petWeightController,
+                          decoration: InputDecoration(
+                            hintText: '반려동물 몸무게',
+                            hintStyle: TextStyle(
+                              color: Colors.black.withOpacity(0.3),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.black.withOpacity(0.2),
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: Color(0xffFF8F9A),
+                              ),
+                            ),
+                            isDense: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     const Text(
                       '성별',
                       style: TextStyle(
@@ -343,6 +389,7 @@ class _SignUpPetState extends State<SignUpPet> {
                     petType: _selectedPetType,
                     petName: _petNameController.text,
                     petAge: _petAgeController.text,
+                    petWeight: _petWeightController.text,
                     petSex: _selectedValue,
                   );
                   Navigator.pushNamedAndRemoveUntil(
@@ -361,7 +408,7 @@ class _SignUpPetState extends State<SignUpPet> {
             GestureDetector(
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                    context, '/main', (route) => false);
               },
               child: const CustomButton(
                 text: '건너뛰기',

@@ -2,6 +2,8 @@
     package="com.example.perpet">
     <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
    <application
         android:label="perpet"
         android:name="${applicationName}"
@@ -48,6 +50,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+            <meta-data
+           android:name="com.naver.maps.map.CLIENT_ID"
+           android:value="w0f8e24tcf" />
     
     </application>
 </manifest>

@@ -2,15 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:perpet/screens/user_info_setting.dart';
+import 'package:perpet/screens/pet_info_screen.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key, required this.currentUser});
+
+  final currentUser;
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
+  @override
+  initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +60,23 @@ class _SettingPageState extends State<SettingPage> {
                   children: [
                     Row(
                       children: [
-                        SvgPicture.asset('assets/icons/circle-user-solid.svg',
-                            width: 50,
-                            height: 50,
-                            color: Colors.black.withOpacity(0.3)),
+                        widget.currentUser['profile_image'] == null
+                            ? SvgPicture.asset(
+                                'assets/icons/circle-user-solid.svg',
+                                width: 50,
+                                height: 50,
+                                color: Colors.black.withOpacity(0.3))
+                            : CircleAvatar(
+                                radius: 25.0,
+                                backgroundColor: Colors.white,
+                                backgroundImage: NetworkImage(
+                                    '${widget.currentUser['profile_image']}')),
                         const SizedBox(
                           width: 20,
                         ),
-                        const Text(
-                          'userName',
-                          style: TextStyle(
+                        Text(
+                          widget.currentUser['nickname'],
+                          style: const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w500),
                         )
                       ],
@@ -69,8 +85,27 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               const SettingCategory(text: '일반'),
-              const SettingItem(text: '내 정보 관리'),
-              const SettingItem(text: '내 반려동물 정보 관리'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserInfoSetting(
+                          isNav: false,
+                          currentUser: widget.currentUser,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const SettingItem(text: '내 정보 관리')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PetInfo()));
+                  },
+                  child: const SettingItem(text: '내 반려동물 관리')),
               const SettingCategory(text: '기기 관리'),
               const SettingItem(text: '웹캠 관리'),
               const SettingItem(text: '자동급식기 관리'),
@@ -78,7 +113,7 @@ class _SettingPageState extends State<SettingPage> {
               const SettingItem(text: '작성 글 관리'),
               const SettingItem(text: '작성 댓글 관리'),
               const SizedBox(
-                height: 100,
+                height: 150,
               ),
               Container(
                 alignment: Alignment.centerLeft,

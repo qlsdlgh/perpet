@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:perpet/screens/sign_up_pet_screen.dart';
+import 'package:perpet/screens/login/sign_up_pet_screen.dart';
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
@@ -35,8 +35,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
       Fluttertoast.showToast(msg: '회원가입 성공');
 
       final currentUser = _auth.currentUser;
-      saveUserInfo(currentUser!.uid, currentUser.email.toString(),
-          currentUser.email.toString());
+      saveUserInfo(currentUser!.uid, currentUser.email, currentUser.email);
 
       Navigator.pushAndRemoveUntil(
           context,
@@ -73,9 +72,12 @@ class _EmailSignUpState extends State<EmailSignUp> {
     }
   }
 
-  void saveUserInfo(String uid, String email, String nickname) {
+  void saveUserInfo(String uid, String? email, String? nickname) {
     firestore.collection('users').doc(uid).set({
       'email': email,
+      'nickname': nickname,
+      'profile_image':
+          'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FrW7cz%2FbtshHOuDgVH%2Fh00XAmNk3TVl017uCnEKg0%2Fimg.png',
     });
   }
 

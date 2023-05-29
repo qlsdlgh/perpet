@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:perpet/widgets/button_style.dart';
+import 'package:perpet/screens/main_screen.dart';
 import 'package:perpet/screens/setting_page.dart';
 
-//로그인 후 보이는 첫화면
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -11,44 +12,60 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _loading = true;
+  final bool _loading = true;
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
+  Map<String, dynamic>? _userData;
+  List<Map<String, dynamic>>? petData;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchUserData();
+    getPetData(_currentUser.uid);
+  }
+
+  Future<void> fetchUserData() async {
+    final document = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUser.uid)
+        .get();
+    if (document.exists) {
       setState(() {
-        _loading = false;
+        _userData = document.data() as Map<String, dynamic>;
       });
-    });
+    }
+  }
+
+  Future<void> getPetData(String uid) async {
+    final collectionRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('pets');
+
+    final querySnapshot = await collectionRef.get();
+
+    petData = await querySnapshotToList(querySnapshot);
+    setState(() {});
+  }
+
+  Future<List<Map<String, dynamic>>> querySnapshotToList(
+      QuerySnapshot<Map<String, dynamic>> snapshot) async {
+    final List<Map<String, dynamic>> dataList = [];
+
+    for (var doc in snapshot.docs) {
+      dataList.add(doc.data());
+    }
+
+    return dataList;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> imageTest = [
-      {
-        "imageUrl":
-            'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FboRFFg%2FbtsdKjNjuEW%2FMzSLgoPetfTFH0ffYUqCt1%2Fimg.jpg',
-        "name": "dog1",
-        "age": "1",
-        "weight": "10"
-      },
-      {
-        "imageUrl":
-            'https://hips.hearstapps.com/hmg-prod/images/domestic-cat-lies-in-a-basket-with-a-knitted-royalty-free-image-1592337336.jpg?crop=0.88889xw:1xh;center,top&resize=1200:*',
-        "name": "cat2",
-        "age": "2",
-        "weight": "4"
-      },
-      {
-        "imageUrl":
-            'https://www.peta.org.uk/wp-content/uploads/2022/02/cute-cat-keep-cats-indoors-peta.jpg',
-        "name": "cat3",
-        "age": "3",
-        "weight": "6"
-      },
-    ];
-
     String mainPetName = 'mainPetName';
 
     return Scaffold(
@@ -67,7 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SettingPage(),
+                  builder: (context) => SettingPage(
+                    currentUser: _userData,
+                  ),
                 ),
               );
             },
@@ -76,16 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: _loading
+      body: petData == null
           ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: Color.fromARGB(255, 252, 152, 152),
-                  ),
-                ],
-              ),
+              child: CircularProgressIndicator(color: Color(0xffffBABA)),
             )
           : SingleChildScrollView(
               child: Padding(
@@ -101,55 +113,75 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                                const Row(
                                   children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        text: '오늘은 ',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: mainPetName,
-                                            style: const TextStyle(
-                                              color: Color(0xffffBABA),
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const TextSpan(
-                                            text: '에게 무슨 일이 있었나요?',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
+                                    Text(
+                                      '주변에 있는 동물병원, 약국을 찾으시나요?',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: QuickButton(
-                                    text: '다이어리 쓰러가기',
-                                    bgColor: Color(0xffffBABA),
-                                    textColor: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 10,
+                                  ),
+                                  child: TextButton.icon(
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 14,
+                                    ),
+                                    label: const Text(
+                                      '지도 바로가기',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MainScreen(
+                                                    current: 1,
+                                                  )),
+                                          (route) => false);
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.blue.shade200),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      padding: MaterialStateProperty.all(
+                                        const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 10,
+                                        ),
+                                      ),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(
-                              height: 40,
+                              height: 30,
                             ),
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
+                                const Row(
                                   children: [
                                     Text(
                                       '동네 이웃들과 일상을 공유해요',
@@ -162,20 +194,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: QuickButton(
-                                    text: '커뮤니티 바로가기',
-                                    bgColor: Color(0xffC0E69E),
-                                    textColor: Colors.white,
+                                  padding: const EdgeInsets.only(
+                                    top: 10,
                                   ),
-                                )
+                                  child: TextButton.icon(
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 14,
+                                    ),
+                                    label: const Text(
+                                      '커뮤니티 바로가기',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MainScreen(
+                                                    current: 2,
+                                                  )),
+                                          (route) => false);
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color(0xffC0E69E)),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      padding: MaterialStateProperty.all(
+                                        const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 10,
+                                        ),
+                                      ),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 40,
+                        height: 60,
                       ),
                       Column(
                         children: [
@@ -192,22 +264,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           const SizedBox(
-                            height: 50,
+                            height: 60,
                           ),
                           SizedBox(
                             height: 400,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
-                              itemCount: imageTest.length,
+                              itemCount: petData!.length,
                               padding: const EdgeInsets.symmetric(
                                 vertical: 10,
                               ),
                               itemBuilder: (context, index) {
+                                final data = petData![index];
                                 return MyPets(
-                                  imageUrl: imageTest[index]['imageUrl'],
-                                  petName: imageTest[index]['name'],
-                                  petAge: imageTest[index]['age'],
-                                  petWeight: imageTest[index]['weight'],
+                                  imageUrl: data['petImage'],
+                                  petName: data['petName'],
+                                  petAge: data['petAge'],
+                                  petWeight: data['petWeight'],
+                                  petSex: data['petSex'],
                                 );
                               },
                               separatorBuilder: (context, index) =>
@@ -226,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MyPets extends StatelessWidget {
-  final String imageUrl, petName, petAge, petWeight;
+  final String imageUrl, petName, petAge, petWeight, petSex;
 
   const MyPets({
     super.key,
@@ -234,6 +308,7 @@ class MyPets extends StatelessWidget {
     required this.petName,
     required this.petAge,
     required this.petWeight,
+    required this.petSex,
   });
 
   @override
@@ -242,8 +317,9 @@ class MyPets extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         CircleAvatar(
+          backgroundColor: Colors.white,
           radius: 150,
-          backgroundImage: NetworkImage(imageUrl), // db에서 불러오는 url로 변경
+          backgroundImage: NetworkImage(imageUrl),
         ),
         Positioned(
           bottom: 20,
@@ -281,23 +357,11 @@ class MyPets extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '$petAge살',
+                        '$petAge살 | ${petWeight}kg | $petSex',
                         style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),
-                      const Text(
-                        ' | ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        '${petWeight}kg',
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      )
                     ],
                   )
                 ],

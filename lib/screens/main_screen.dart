@@ -1,15 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:perpet/screens/IoT_feed_screen.dart';
-import 'package:perpet/screens/IoT_water_screen.dart';
+import 'package:perpet/screens/IoT/IoT_feed_screen.dart';
+import 'package:perpet/screens/IoT/IoT_water_screen.dart';
 import 'package:perpet/screens/community_screen.dart';
 import 'package:perpet/screens/map_screen.dart';
-import 'package:perpet/screens/setting_page.dart';
 import 'package:perpet/screens/home_screen.dart';
-
-import 'IoT_cam_screen.dart';
+import 'package:perpet/screens/user_info_setting.dart';
+import 'IoT/IoT_cam_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key, this.current});
+
+  final current;
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -17,10 +21,45 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   Widget currentScreen = const HomeScreen();
   final PageStorageBucket bucket = PageStorageBucket();
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
+  Map<String, dynamic>? _userData;
+
+  int currentTab = 0;
+  var alignment = Alignment.bottomLeft;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.current == 1) {
+      setState(() {
+        currentTab = 1;
+        currentScreen = const MapScreen();
+      });
+    } else if (widget.current == 2) {
+      setState(() {
+        currentTab = 2;
+        currentScreen = const CommunityScreen();
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    final document = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_currentUser.uid)
+        .get();
+    if (document.exists) {
+      setState(() {
+        _userData = document.data() as Map<String, dynamic>;
+      });
+    }
   }
 
   void floatButtonBar() {
@@ -104,9 +143,6 @@ class _MainScreenState extends State<MainScreen> {
           );
         });
   }
-
-  int currentTab = 0;
-  var alignment = Alignment.bottomLeft;
 
   @override
   Widget build(BuildContext context) {
@@ -226,15 +262,18 @@ class _MainScreenState extends State<MainScreen> {
                 child: MaterialButton(
                   onPressed: () {
                     setState(() {
-                      currentScreen = const SettingPage();
+                      currentScreen = UserInfoSetting(
+                        isNav: true,
+                        currentUser: _userData,
+                      );
                       currentTab = 3;
                     });
                   },
                   child: Column(
                     children: [
                       currentTab == 3
-                          ? const Icon(Icons.person_3_outlined)
-                          : const Icon(Icons.person_3), // 아이콘 수정 필요
+                          ? const Icon(Icons.person_3)
+                          : const Icon(Icons.person_3_outlined),
                       const Text(
                         '마이페이지',
                         style: TextStyle(

@@ -117,6 +117,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       ),
                       TextField(
                         controller: _passwordController,
+                        obscureText: true,
                         onChanged: (value) {},
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력하세요',
