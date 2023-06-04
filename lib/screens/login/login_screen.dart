@@ -46,31 +46,38 @@ class _LogInState extends State<LoginScreen> {
               '반려동물 통합 관리 앱 퍼펫',
               style: TextStyle(
                   color: Color(0xffFF8F9A),
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             const SizedBox(
               height: 80,
             ),
             // 이메일 로그인
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/email');
-              },
-              child: Image.asset(
-                'assets/email_login.png',
-                scale: 1.7,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // 구글 로그인
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/googlelogin.png',
-                scale: 1.7,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/email');
+                    },
+                    child: Image.asset(
+                      'assets/email_login.png',
+                      scale: 1.7,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // 구글 로그인
+                  GestureDetector(
+                    onTap: () {},
+                    child: Image.asset(
+                      'assets/googlelogin.png',
+                      scale: 1.7,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -94,6 +94,8 @@ flutter:
     - assets/icons/cat_icon_select.png
     - assets/icons/iot_button.png
     - assets/icons/iot_button_clicked.png
+    - assets/icons/pharmacy_icon.png
+    - assets/icons/hospital_icon.png
     - assets/kakaologin.png
     - assets/googlelogin.png
     - assets/email_login.png

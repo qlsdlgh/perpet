@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:perpet/screens/posting_community.dart';
+import 'package:perpet/screens/main_screen.dart';
+import 'package:perpet/screens/community/posting_community.dart';
+
+import '../../widgets/no_glow_scroll.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -68,7 +71,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         floatingActionButton: FloatingActionButton(
           heroTag: 'posting',
           backgroundColor: const Color(0xffffBABA),
-          splashColor: Colors.pink[50],
+          elevation: 0,
           onPressed: (_postData == null && _userData == null)
               ? () {}
               : () {
@@ -81,7 +84,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     setState(() {});
                   });
                 },
-          child: const Icon(Icons.draw),
+          child: const Icon(Icons.edit),
         ),
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -107,37 +110,39 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   ],
                 ),
               )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: _postData != null
-                          ? ListView.separated(
-                              shrinkWrap: true,
-                              primary: false,
-                              reverse: true,
-                              itemBuilder: (context, index) {
-                                final data = _postData![index];
-                                return Post(
-                                    currentUser: _userData,
-                                    postId: data['post_id'],
-                                    title: data['post_title'],
-                                    content: data['post_content'],
-                                    time: data['post_time'],
-                                    writerImage: data['writer_image'],
-                                    writerName: data['post_writer']);
-                              },
-                              itemCount: _postData!.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                height: 60,
-                              ),
-                            )
-                          : const CircularProgressIndicator(
-                              color: Color(0xffffBABA)),
-                    ),
-                  ],
+            : ScrollConfiguration(
+                behavior: NoGlowScrollBehavior(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: _postData != null
+                            ? ListView.separated(
+                                shrinkWrap: true,
+                                primary: false,
+                                itemBuilder: (context, index) {
+                                  final data = _postData![index];
+                                  return Post(
+                                      currentUser: _userData,
+                                      postId: data['post_id'],
+                                      title: data['post_title'],
+                                      content: data['post_content'],
+                                      time: data['post_time'],
+                                      writerImage: data['writer_image'],
+                                      writerName: data['post_writer']);
+                                },
+                                itemCount: _postData!.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 60,
+                                ),
+                              )
+                            : const CircularProgressIndicator(
+                                color: Color(0xffffBABA)),
+                      ),
+                    ],
+                  ),
                 ),
               ));
   }
@@ -336,6 +341,7 @@ class _PostState extends State<Post> {
                         ListView.separated(
                           reverse: true,
                           shrinkWrap: true,
+                          primary: false,
                           itemBuilder: (context, index) {
                             final data = _commentData![index];
                             return Comment(
@@ -428,8 +434,9 @@ class _PostState extends State<Post> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CommunityScreen()),
+                                      builder: (context) => const MainScreen(
+                                            current: 2,
+                                          )),
                                   (route) => false);
                             });
 

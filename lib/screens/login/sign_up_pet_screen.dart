@@ -23,7 +23,7 @@ class _SignUpPetState extends State<SignUpPet> {
       required String petAge,
       required String petWeight,
       required String petSex}) async {
-    await firestore.collection('users').doc(uid).set({
+    await firestore.collection('users').doc(uid).update({
       'nickname': nickname,
       'email': widget.currentUser.email,
     });
@@ -90,7 +90,7 @@ class _SignUpPetState extends State<SignUpPet> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.all(30),
         child: Column(
           children: [
             Expanded(
@@ -101,7 +101,7 @@ class _SignUpPetState extends State<SignUpPet> {
                     const Text(
                       '유저 정보',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -114,7 +114,7 @@ class _SignUpPetState extends State<SignUpPet> {
                         const Text(
                           '닉네임',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -168,7 +168,7 @@ class _SignUpPetState extends State<SignUpPet> {
                     const Text(
                       '대표 반려동물 정보',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -231,7 +231,7 @@ class _SignUpPetState extends State<SignUpPet> {
                         const Text(
                           '반려동물 이름',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -271,7 +271,7 @@ class _SignUpPetState extends State<SignUpPet> {
                         const Text(
                           '반려동물 나이',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -311,7 +311,7 @@ class _SignUpPetState extends State<SignUpPet> {
                         const Text(
                           '반려동물 몸무게',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -348,7 +348,7 @@ class _SignUpPetState extends State<SignUpPet> {
                     const Text(
                       '성별',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -373,6 +373,9 @@ class _SignUpPetState extends State<SignUpPet> {
                   ],
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             GestureDetector(
               onTap: () {

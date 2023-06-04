@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:perpet/screens/IoT/IoT_feed_screen.dart';
-import 'package:perpet/screens/IoT/IoT_water_screen.dart';
-import 'package:perpet/screens/community_screen.dart';
+import 'package:perpet/screens/IoT/IoT_dry_feed_screen.dart';
+import 'package:perpet/screens/IoT/IoT_wet_feed_screen.dart';
+import 'package:perpet/screens/IoT/IoT_cam_screen.dart';
+import 'package:perpet/screens/community/community_screen.dart';
 import 'package:perpet/screens/map_screen.dart';
 import 'package:perpet/screens/home_screen.dart';
-import 'package:perpet/screens/user_info_setting.dart';
-import 'IoT/IoT_cam_screen.dart';
+import 'package:perpet/screens/setting/user_info_setting.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, this.current});
@@ -86,7 +86,8 @@ class _MainScreenState extends State<MainScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const IoTFeedScreen()),
+                                  builder: (context) =>
+                                      const IoTDryFeedScreen()),
                             );
                           },
                           style: ButtonStyle(
@@ -94,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
                                 Colors.pink[100]!),
                           ),
                           child: const Text(
-                            "사료",
+                            "건식",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -104,7 +105,8 @@ class _MainScreenState extends State<MainScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const IoTWaterScreen()),
+                                  builder: (context) =>
+                                      const IoTWetFeedScreen()),
                             );
                           },
                           style: ButtonStyle(
@@ -112,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
                                 Colors.pink[100]!),
                           ),
                           child: const Text(
-                            "물",
+                            "습식",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -168,125 +170,124 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        //플로팅 버튼을 제외한 바텀네비게이션바
+        height: 60,
+        padding: const EdgeInsets.only(top: 10),
         color: Colors.white,
         shape: const CircularNotchedRectangle(),
         notchMargin: -5,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = const HomeScreen();
-                      currentTab = 0;
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      currentTab == 0
-                          ? Image.asset('assets/icons/home_icon_clicked.png')
-                          : Image.asset('assets/icons/home_icon.png'),
-                      const Text(
-                        '홈',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            MaterialButton(
+              minWidth: 70,
+              onPressed: () {
+                setState(() {
+                  currentScreen = const HomeScreen();
+                  currentTab = 0;
+                });
+              },
+              child: Column(
+                children: [
+                  currentTab == 0
+                      ? const Icon(Icons.home)
+                      : const Icon(Icons.home_outlined),
+                  const SizedBox(
+                    height: 2,
                   ),
-                ),
+                  const Text(
+                    '홈',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = const MapScreen();
-                      currentTab = 1;
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      currentTab == 1
-                          ? Image.asset(
-                              'assets/icons/map-pin-fill.png',
-                            )
-                          : Image.asset('assets/icons/map-pin-line.png'),
-                      const Text(
-                        '지도',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+            ),
+            MaterialButton(
+              minWidth: 77,
+              onPressed: () {
+                setState(() {
+                  currentScreen = const MapScreen();
+                  currentTab = 1;
+                });
+              },
+              child: Column(
+                children: [
+                  currentTab == 1
+                      ? const Icon(Icons.location_on_sharp)
+                      : const Icon(Icons.location_on_outlined),
+                  const SizedBox(
+                    height: 2,
                   ),
-                ),
+                  const Text(
+                    '지도',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = const CommunityScreen();
-                      currentTab = 2;
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      currentTab == 2
-                          ? Image.asset(
-                              'assets/icons/community_icon_clicked.png',
-                            )
-                          : Image.asset('assets/icons/community_icon.png'),
-                      const Text(
-                        '커뮤니티',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+            ),
+            const SizedBox(
+              width: 60,
+            ),
+            MaterialButton(
+              minWidth: 70,
+              onPressed: () {
+                setState(() {
+                  currentScreen = const CommunityScreen();
+                  currentTab = 2;
+                });
+              },
+              child: Column(
+                children: [
+                  currentTab == 2
+                      ? const Icon(Icons.description_rounded)
+                      : const Icon(Icons.description_outlined),
+                  const SizedBox(
+                    height: 2,
                   ),
-                ),
+                  const Text(
+                    '커뮤니티',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = UserInfoSetting(
-                        isNav: true,
-                        currentUser: _userData,
-                      );
-                      currentTab = 3;
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      currentTab == 3
-                          ? const Icon(Icons.person_3)
-                          : const Icon(Icons.person_3_outlined),
-                      const Text(
-                        '마이페이지',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+            ),
+            MaterialButton(
+              minWidth: 70,
+              onPressed: () {
+                setState(() {
+                  currentScreen = const UserInfoSetting(
+                    isNav: true,
+                  );
+                  currentTab = 3;
+                });
+              },
+              child: Column(
+                children: [
+                  currentTab == 3
+                      ? const Icon(Icons.person_3)
+                      : const Icon(Icons.person_3_outlined),
+                  const SizedBox(
+                    height: 2,
                   ),
-                ),
-              )
-            ],
-          ),
+                  const Text(
+                    '마이페이지',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

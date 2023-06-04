@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:perpet/screens/main_screen.dart';
-import 'package:perpet/screens/setting_page.dart';
+import 'package:perpet/screens/setting/pet_info_screen.dart';
+import 'package:perpet/screens/setting/setting_page.dart';
+
+import '../widgets/no_glow_scroll.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -88,7 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     currentUser: _userData,
                   ),
                 ),
-              );
+              ).then((value) {
+                fetchUserData();
+                getPetData(_currentUser.uid);
+                setState(() {});
+              });
             },
             icon: const Icon(Icons.menu),
             iconSize: 28,
@@ -99,201 +106,218 @@ class _HomeScreenState extends State<HomeScreen> {
           ? const Center(
               child: CircularProgressIndicator(color: Color(0xffffBABA)),
             )
-          : SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 25,
-                        ),
-                        child: Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Row(
-                                  children: [
-                                    Text(
-                                      '주변에 있는 동물병원, 약국을 찾으시나요?',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
+          : ScrollConfiguration(
+              behavior: NoGlowScrollBehavior(),
+              child: SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                          ),
+                          child: Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Text(
+                                        '주변에 있는 동물병원, 약국을 찾으시나요?',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10,
+                                    ],
                                   ),
-                                  child: TextButton.icon(
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: 14,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 5,
                                     ),
-                                    label: const Text(
-                                      '지도 바로가기',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                    child: TextButton.icon(
+                                      icon: const Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 14,
                                       ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MainScreen(
-                                                    current: 1,
-                                                  )),
-                                          (route) => false);
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.blue.shade200),
-                                      foregroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white),
-                                      padding: MaterialStateProperty.all(
-                                        const EdgeInsets.symmetric(
-                                          vertical: 5,
-                                          horizontal: 10,
+                                      label: const Text(
+                                        '지도 바로가기',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MainScreen(
+                                                      current: 1,
+                                                    )),
+                                            (route) => false);
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.blue.shade200),
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.white),
+                                        padding: MaterialStateProperty.all(
+                                          const EdgeInsets.symmetric(
+                                            vertical: 5,
+                                            horizontal: 10,
+                                          ),
+                                        ),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
                                         ),
                                       ),
                                     ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Text(
+                                        '동네 이웃들과 일상을 공유해요',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                    ),
+                                    child: TextButton.icon(
+                                      icon: const Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 14,
+                                      ),
+                                      label: const Text(
+                                        '커뮤니티 바로가기',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MainScreen(
+                                                      current: 2,
+                                                    )),
+                                            (route) => false);
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xffC0E69E)),
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.white),
+                                        padding: MaterialStateProperty.all(
+                                          const EdgeInsets.symmetric(
+                                            vertical: 5,
+                                            horizontal: 10,
+                                          ),
+                                        ),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Column(
+                          children: [
+                            const Row(
+                              children: [
+                                Text(
+                                  '나의 반려동물',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 20,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Row(
-                                  children: [
-                                    Text(
-                                      '동네 이웃들과 일상을 공유해요',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const PetInfo(),
                                   ),
-                                  child: TextButton.icon(
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: 14,
-                                    ),
-                                    label: const Text(
-                                      '커뮤니티 바로가기',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MainScreen(
-                                                    current: 2,
-                                                  )),
-                                          (route) => false);
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color(0xffC0E69E)),
-                                      foregroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white),
-                                      padding: MaterialStateProperty.all(
-                                        const EdgeInsets.symmetric(
-                                          vertical: 5,
-                                          horizontal: 10,
-                                        ),
-                                      ),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
+                                ).then((value) {
+                                  fetchUserData();
+                                  getPetData(_currentUser.uid);
+                                  setState(() {});
+                                });
+                              },
+                              child: SizedBox(
+                                height: 300,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: petData!.length,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final data = petData![index];
+                                    return MyPets(
+                                      imageUrl: data['petImage'],
+                                      petName: data['petName'],
+                                      petAge: data['petAge'],
+                                      petWeight: data['petWeight'],
+                                      petSex: data['petSex'],
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    width: 20,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 60,
-                      ),
-                      Column(
-                        children: [
-                          const Row(
-                            children: [
-                              Text(
-                                '나의 반려동물',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          SizedBox(
-                            height: 400,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: petData!.length,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                              ),
-                              itemBuilder: (context, index) {
-                                final data = petData![index];
-                                return MyPets(
-                                  imageUrl: data['petImage'],
-                                  petName: data['petName'],
-                                  petAge: data['petAge'],
-                                  petWeight: data['petWeight'],
-                                  petSex: data['petSex'],
-                                );
-                              },
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                width: 40,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
+                      ],
+                    )),
+              ),
             ),
     );
   }
@@ -313,63 +337,66 @@ class MyPets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 150,
-          backgroundImage: NetworkImage(imageUrl),
-        ),
-        Positioned(
-          bottom: 20,
-          child: GestureDetector(
-            onTap: () {}, // 반려동물 정보 카드 누르면 동물 정보로 이동
-            child: Container(
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                  )
-                ],
-                borderRadius: BorderRadius.circular(40),
-              ),
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    petName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '$petAge살 | ${petWeight}kg | $petSex',
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 100,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          Positioned(
+            top: 170,
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      petName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  )
-                ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '$petAge살 | ${petWeight}kg | $petSex',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

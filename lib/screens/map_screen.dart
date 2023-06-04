@@ -49,15 +49,20 @@ class _MapScreenState extends State<MapScreen> {
     for (var hos in hospitalData) {
       hospitalMarkers.add(NMarker(
           id: hos.name,
+          icon: const NOverlayImage.fromAssetImage(
+              'assets/icons/hospital_icon.png'),
           position: NLatLng(hos.latitude, hos.longitude),
           caption: NOverlayCaption(text: hos.name)));
     }
 
     for (var phar in pharmacyData) {
       pharmacyMarkers.add(NMarker(
-          id: phar.name,
-          position: NLatLng(phar.latitude, phar.longitude),
-          caption: NOverlayCaption(text: phar.name)));
+        id: phar.name,
+        icon: const NOverlayImage.fromAssetImage(
+            'assets/icons/pharmacy_icon.png'),
+        position: NLatLng(phar.latitude, phar.longitude),
+        caption: NOverlayCaption(text: phar.name),
+      ));
     }
 
     setState(() {});
@@ -97,7 +102,7 @@ class _MapScreenState extends State<MapScreen> {
                 await controller.addOverlayAll(hospitalMarkers);
                 await controller.addOverlayAll(pharmacyMarkers);
                 final initialmarker = NMarker(
-                  iconTintColor: Colors.pink.withOpacity(0.8),
+                  icon: const NOverlayImage.fromAssetImage(''),
                   id: '_initialmarker',
                   position: _initialPosition!,
                 );

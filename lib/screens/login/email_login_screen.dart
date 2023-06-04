@@ -19,6 +19,7 @@ class _EmailLoginState extends State<EmailLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -40,7 +41,7 @@ class _EmailLoginState extends State<EmailLogin> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(40),
+              padding: const EdgeInsets.all(30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -50,7 +51,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       const Text(
                         '이메일',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -108,7 +109,7 @@ class _EmailLoginState extends State<EmailLogin> {
                       const Text(
                         '비밀번호',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -1,7 +1,9 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:perpet/screens/setting/pet_add_screen.dart';
+
+import '../../widgets/no_glow_scroll.dart';
 
 class PetInfo extends StatefulWidget {
   const PetInfo({super.key});
@@ -69,74 +71,86 @@ class _PetInfoState extends State<PetInfo> {
             iconSize: 34,
           ),
         ),
-        body: SingleChildScrollView(
-            child: Padding(
-          padding: const EdgeInsets.fromLTRB(40, 30, 40, 40),
-          child: petData == null
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '새로운 반려동물 추가',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
+        body: petData == null
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xffffBABA)),
+              )
+            : Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PetAddScreen(),
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.add_circle_outline_sharp,
-                          color: Colors.black54,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    ListView.separated(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: petData!.length,
-                      itemBuilder: (context, index) {
-                        final data = petData![index];
-                        return PetCardList(
-                          image: data['petImage'],
-                          name: data['petName'],
-                          age: data['petAge'],
-                          weight: data['petWeight'],
-                          sex: data['petSex'],
-                        );
-                      },
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 20,
+                      ).then((value) {
+                        getPetData(_currentUser.uid);
+                        setState(() {});
+                      });
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '새로운 반려동물 추가',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54),
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Icon(
+                            Icons.add_circle_outline_sharp,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-        ))
-
-        /*
-      petData == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: petData!.length,
-              itemBuilder: (context, index) {
-                final data = petData![index];
-
-                return ListTile(
-                  title: Text(data['petName']),
-                  subtitle: Text(data['petType']),
-                );
-              }),
-              */
-        );
+                  ),
+                  Expanded(
+                    child: ScrollConfiguration(
+                      behavior: NoGlowScrollBehavior(),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          child: Column(
+                            children: [
+                              ListView.separated(
+                                shrinkWrap: true,
+                                primary: false,
+                                scrollDirection: Axis.vertical,
+                                itemCount: petData!.length,
+                                itemBuilder: (context, index) {
+                                  final data = petData![index];
+                                  return PetCardList(
+                                    image: data['petImage'],
+                                    name: data['petName'],
+                                    age: data['petAge'],
+                                    weight: data['petWeight'],
+                                    sex: data['petSex'],
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ));
   }
 }
 
@@ -160,19 +174,19 @@ class PetCardList extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                border: Border.all(width: 2, color: const Color(0xffffBABA)),
+                border: Border.all(width: 1, color: Colors.black26),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Row(
                   children: [
                     CircleAvatar(
                         backgroundColor: Colors.white,
-                        radius: 100,
+                        radius: 60,
                         backgroundImage: NetworkImage(image)),
                     const SizedBox(
-                      width: 30,
+                      width: 20,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,18 +194,21 @@ class PetCardList extends StatelessWidget {
                         Text(
                           name,
                           style: const TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(
-                          height: 15,
+                          height: 10,
                         ),
                         Text(
                           "$age살 | ${weight}kg",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         Text(
                           sex,
@@ -203,6 +220,7 @@ class PetCardList extends StatelessWidget {
                 ),
               ),
             ),
+            /*
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -210,7 +228,7 @@ class PetCardList extends StatelessWidget {
                   onPressed: () {},
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all(const Color(0xffFF8F9A)),
+                        MaterialStateProperty.all(const Color(0xffffBABA)),
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                     padding: MaterialStateProperty.all(
                       const EdgeInsets.symmetric(
@@ -234,6 +252,7 @@ class PetCardList extends StatelessWidget {
                 )
               ],
             )
+            */
           ],
         ),
       ],
