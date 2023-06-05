@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:perpet/screens/setting/user_comment_screen.dart';
 import 'package:perpet/screens/setting/user_info_setting.dart';
 import 'package:perpet/screens/setting/pet_info_screen.dart';
+import 'package:perpet/screens/setting/user_post_screen.dart';
 
 import '../../widgets/no_glow_scroll.dart';
 
@@ -110,8 +112,26 @@ class _SettingPageState extends State<SettingPage> {
                     },
                     child: const SettingItem(text: '내 반려동물 관리')),
                 const SettingCategory(text: '커뮤니티'),
-                const SettingItem(text: '작성 글 관리'),
-                const SettingItem(text: '작성 댓글 관리'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserPostScreen(),
+                        ),
+                      );
+                    },
+                    child: const SettingItem(text: '작성 글 관리')),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserCommentScreen(),
+                        ),
+                      );
+                    },
+                    child: const SettingItem(text: '작성 댓글 관리')),
                 const SizedBox(
                   height: 80,
                 ),

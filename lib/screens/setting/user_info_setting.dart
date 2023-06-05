@@ -166,59 +166,60 @@ class _UserInfoSettingState extends State<UserInfoSetting> {
 
   void withdrawal() async {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: const Text(
-              '정말 탈퇴하시겠습니까?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  try {
-                    await FirebaseAuth.instance.currentUser?.unlink('password');
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(_currentUser.uid)
-                        .delete();
-                    _showDialog('회원 탈퇴가 완료되었습니다.');
-                    Future.delayed(const Duration(milliseconds: 400), () {
-                      Navigator.popAndPushNamed(context, '/login');
-                    });
-                  } on FirebaseAuthException catch (e) {
-                    switch (e.code) {
-                      case "no-such-provider":
-                        Fluttertoast.showToast(
-                            msg:
-                                "The user isn't linked to the provider or the provider "
-                                "doesn't exist.");
-                        break;
-                      default:
-                        Fluttertoast.showToast(msg: "Unkown error.");
-                    }
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text(
+            '정말 탈퇴하시겠습니까?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.currentUser?.unlink('password');
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(_currentUser.uid)
+                      .delete();
+                  _showDialog('회원 탈퇴가 완료되었습니다.');
+                  Future.delayed(const Duration(milliseconds: 400), () {
+                    Navigator.popAndPushNamed(context, '/login');
+                  });
+                } on FirebaseAuthException catch (e) {
+                  switch (e.code) {
+                    case "no-such-provider":
+                      Fluttertoast.showToast(
+                          msg:
+                              "The user isn't linked to the provider or the provider "
+                              "doesn't exist.");
+                      break;
+                    default:
+                      Fluttertoast.showToast(msg: "Unkown error.");
                   }
-                },
-                child: const Text(
-                  '예',
-                  style: TextStyle(
-                    color: Colors.black45,
-                  ),
+                }
+              },
+              child: const Text(
+                '예',
+                style: TextStyle(
+                  color: Colors.black45,
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  '아니오',
-                  style: TextStyle(
-                    color: Colors.black45,
-                  ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                '아니오',
+                style: TextStyle(
+                  color: Colors.black45,
                 ),
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -252,7 +253,7 @@ class _UserInfoSettingState extends State<UserInfoSetting> {
               : Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -342,7 +343,7 @@ class _UserInfoSettingState extends State<UserInfoSetting> {
                               Text(
                                 _userData!['email'],
                                 style: const TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                 ),
                               ),
                             ],
@@ -522,7 +523,7 @@ class _UserInfoSettingState extends State<UserInfoSetting> {
                           color: Colors.black.withOpacity(0.3),
                           width: 1.0,
                         ))),
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        padding: const EdgeInsets.all(15),
                         child: GestureDetector(
                           onTap: () {
                             withdrawal();
@@ -531,7 +532,7 @@ class _UserInfoSettingState extends State<UserInfoSetting> {
                             '회원탈퇴',
                             style: TextStyle(
                               color: Colors.black.withOpacity(0.5),
-                              fontSize: 20,
+                              fontSize: 18,
                             ),
                           ),
                         ),

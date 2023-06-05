@@ -11,10 +11,10 @@ class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
 
   @override
-  State<PostingScreen> createState() => _PostWriteScreen();
+  State<PostingScreen> createState() => _PostingScreenState();
 }
 
-class _PostWriteScreen extends State<PostingScreen> {
+class _PostingScreenState extends State<PostingScreen> {
   final firestore = FirebaseFirestore.instance;
   final User _currentUser = FirebaseAuth.instance.currentUser!;
   final uuid = const Uuid();
@@ -66,6 +66,7 @@ class _PostWriteScreen extends State<PostingScreen> {
       'post_title': title,
       'post_content': content,
       'post_writer': userName!,
+      'post_writer_id': _currentUser.uid,
       'writer_image': _userData!['profile_image'],
     });
   }

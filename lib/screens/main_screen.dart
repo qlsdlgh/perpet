@@ -180,6 +180,8 @@ class _MainScreenState extends State<MainScreen> {
           children: <Widget>[
             MaterialButton(
               minWidth: 70,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   currentScreen = const HomeScreen();
@@ -206,6 +208,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
             MaterialButton(
               minWidth: 77,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   currentScreen = const MapScreen();
@@ -235,6 +239,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
             MaterialButton(
               minWidth: 70,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   currentScreen = const CommunityScreen();
@@ -261,6 +267,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
             MaterialButton(
               minWidth: 70,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   currentScreen = const UserInfoSetting(
