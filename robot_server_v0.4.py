@@ -101,7 +101,7 @@ def Control_Rpi(data):
         sound = data
         Play_Audio(sound)     
 
-    client_socket.sendall(data.encode())
+    client_socket.sendall(data)
 
 try:
     while True:
