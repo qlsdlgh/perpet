@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:perpet/widgets/button_style.dart';
 import 'package:perpet/widgets/no_glow_scroll.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpPet extends StatefulWidget {
   const SignUpPet({super.key, required this.currentUser});
@@ -14,6 +15,7 @@ class SignUpPet extends StatefulWidget {
 
 class _SignUpPetState extends State<SignUpPet> {
   final firestore = FirebaseFirestore.instance;
+  final uuid = const Uuid();
 
   void saveUserInfo(
       {required String uid,
@@ -24,18 +26,16 @@ class _SignUpPetState extends State<SignUpPet> {
       required String petAge,
       required String petWeight,
       required String petSex}) async {
+    String petId = uuid.v4();
     await firestore.collection('users').doc(uid).update({
       'nickname': nickname,
       'email': widget.currentUser.email,
     });
 
-    await firestore
-        .collection('users')
-        .doc(uid)
-        .collection('pets')
-        .doc('$petName$uid')
-        .set({
+    await firestore.collection('users').doc(uid).collection('pets').add({
       'is_main': true,
+      'petUserUid': uid,
+      'petId': petId,
       'petImage':
           'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbRHwqW%2FbtshaszemDc%2FbPQFunfimkFbsCksNzcPqK%2Fimg.png',
       'petType': petType,

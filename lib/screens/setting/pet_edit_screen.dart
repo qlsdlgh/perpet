@@ -9,14 +9,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:perpet/widgets/button_style.dart';
 import 'package:uuid/uuid.dart';
 
-class PetAddScreen extends StatefulWidget {
-  const PetAddScreen({super.key});
+class PetEditScreen extends StatefulWidget {
+  final String petId, petType, petName, petAge, petWeight, petSex;
+
+  const PetEditScreen({
+    super.key,
+    required this.petId,
+    required this.petType,
+    required this.petName,
+    required this.petAge,
+    required this.petWeight,
+    required this.petSex,
+  });
 
   @override
-  State<PetAddScreen> createState() => _PetAddScreenState();
+  State<PetEditScreen> createState() => _PetEditScreenState();
 }
 
-class _PetAddScreenState extends State<PetAddScreen> {
+class _PetEditScreenState extends State<PetEditScreen> {
   final firestore = FirebaseFirestore.instance;
   final User _currentUser = FirebaseAuth.instance.currentUser!;
   final _formKey = GlobalKey<FormState>();
@@ -43,6 +53,11 @@ class _PetAddScreenState extends State<PetAddScreen> {
     setState(() {
       _selectedValue = _valueList[0];
     });
+    if (widget.petType == 'dog') {
+      _isDogSelect = true;
+    } else {
+      _isCatSelect = true;
+    }
   }
 
   @override
@@ -59,9 +74,13 @@ class _PetAddScreenState extends State<PetAddScreen> {
       required String petSex}) async {
     String petId = uuid.v4();
 
-    await firestore.collection('users').doc(uid).collection('pets').add({
+    await firestore
+        .collection('users')
+        .doc(uid)
+        .collection('pets')
+        .doc(petId)
+        .update({
       'is_main': true,
-      'petUserUid': uid,
       'petId': petId,
       'petImage': _imageUrl ??
           'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbRHwqW%2FbtshaszemDc%2FbPQFunfimkFbsCksNzcPqK%2Fimg.png',
@@ -118,7 +137,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: const Text("새 반려동물 추가"),
+        title: const Text("반려동물 정보 수정"),
         titleTextStyle: const TextStyle(
             color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
         toolbarHeight: 60,
@@ -254,6 +273,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
                     ),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
+                      initialValue: widget.petName,
                       onSaved: (value) {
                         setState(() {
                           _name = value as String;
@@ -305,6 +325,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
                     ),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
+                      initialValue: widget.petAge,
                       onSaved: (value) {
                         setState(() {
                           _age = value as String;
@@ -356,6 +377,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
                     ),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
+                      initialValue: widget.petWeight,
                       onSaved: (value) {
                         setState(() {
                           _weight = value as String;

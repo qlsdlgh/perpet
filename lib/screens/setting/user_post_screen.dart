@@ -82,6 +82,11 @@ class _UserPostScreenState extends State<UserPostScreen> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const UserPostScreen()));
                           },
                         )
                       ],

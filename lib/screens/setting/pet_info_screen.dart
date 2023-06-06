@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:perpet/screens/setting/pet_add_screen.dart';
+import 'package:perpet/screens/setting/pet_edit_screen.dart';
 
 import '../../widgets/no_glow_scroll.dart';
 
@@ -136,6 +137,8 @@ class _PetInfoState extends State<PetInfo> {
                                     age: data['petAge'],
                                     weight: data['petWeight'],
                                     sex: data['petSex'],
+                                    petId: data['petId'],
+                                    petType: data['petType'],
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
@@ -154,8 +157,8 @@ class _PetInfoState extends State<PetInfo> {
   }
 }
 
-class PetCardList extends StatelessWidget {
-  final String image, name, age, weight, sex;
+class PetCardList extends StatefulWidget {
+  final String image, name, age, weight, sex, petId, petType;
 
   const PetCardList({
     super.key,
@@ -164,7 +167,89 @@ class PetCardList extends StatelessWidget {
     required this.age,
     required this.weight,
     required this.sex,
+    required this.petId,
+    required this.petType,
   });
+
+  @override
+  State<PetCardList> createState() => _PetCardListState();
+}
+
+class _PetCardListState extends State<PetCardList> {
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
+
+  void deletePet(String petId) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text(
+            '정말 삭제하시겠습니까?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                CollectionReference collectionRef = FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(_currentUser.uid)
+                    .collection('pets');
+
+                QuerySnapshot querySnapshot =
+                    await collectionRef.where('petId', isEqualTo: petId).get();
+
+                for (var doc in querySnapshot.docs) {
+                  doc.reference.delete();
+                }
+
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: const Text('반려동물 정보가 삭제되었습니다.'),
+                      actions: [
+                        TextButton(
+                          child: const Text(
+                            'close',
+                            style: TextStyle(color: Colors.black45),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const PetInfo()));
+                          },
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text(
+                '예',
+                style: TextStyle(
+                  color: Colors.black45,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                '아니오',
+                style: TextStyle(
+                  color: Colors.black45,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +269,7 @@ class PetCardList extends StatelessWidget {
                     CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 60,
-                        backgroundImage: NetworkImage(image)),
+                        backgroundImage: NetworkImage(widget.image)),
                     const SizedBox(
                       width: 20,
                     ),
@@ -192,7 +277,7 @@ class PetCardList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          widget.name,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -202,7 +287,7 @@ class PetCardList extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          "$age살 | ${weight}kg",
+                          "${widget.age}살 | ${widget.weight}kg",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -211,7 +296,7 @@ class PetCardList extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          sex,
+                          widget.sex,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
@@ -220,20 +305,30 @@ class PetCardList extends StatelessWidget {
                 ),
               ),
             ),
-            /*
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PetEditScreen(
+                                  petId: widget.petId,
+                                  petType: widget.petType,
+                                  petName: widget.name,
+                                  petAge: widget.age,
+                                  petWeight: widget.weight,
+                                  petSex: widget.sex,
+                                )));
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(const Color(0xffffBABA)),
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                     padding: MaterialStateProperty.all(
                       const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 20,
+                        horizontal: 5,
                       ),
                     ),
                     shape: MaterialStateProperty.all(
@@ -243,16 +338,44 @@ class PetCardList extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    '정보 수정',
+                    '수정',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                TextButton(
+                  onPressed: () {
+                    deletePet(widget.petId);
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black38),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(
+                        horizontal: 5,
+                      ),
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  child: const Text(
+                    '삭제',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             )
-            */
           ],
         ),
       ],

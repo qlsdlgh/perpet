@@ -105,6 +105,11 @@ class _UserCommentScreenState extends State<UserCommentScreen> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const UserCommentScreen()));
                           },
                         )
                       ],
