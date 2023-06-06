@@ -56,6 +56,11 @@ dependencies:
   flutter_naver_map: ^1.0.0
   geolocator: ^9.0.2
   flutter_time_picker_spinner: ^2.0.0
+  flutter_sound: ^9.2.13
+  flutter_audio_recorder3: ^0.0.5
+  audioplayers: ^4.1.0
+  file: ^6.1.4
+  path_provider: ^2.0.15
 
 dev_dependencies:
   flutter_test:
