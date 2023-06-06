@@ -167,6 +167,7 @@ class _DryFeedReserveState extends State<DryFeedReserve> {
                 ),
                 TimePickerSpinner(
                   is24HourMode: false,
+                  spacing: 30,
                   normalTextStyle: const TextStyle(
                     fontSize: 24,
                     color: Colors.black38,
