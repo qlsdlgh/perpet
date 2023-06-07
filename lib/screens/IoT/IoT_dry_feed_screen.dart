@@ -31,7 +31,7 @@ class _IoTDryFeedScreen extends State<IoTDryFeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    getFeedData(_currentUser.uid, '건식');
+    getFeedData(_currentUser.uid, 'DRY_MEAL');
   }
 
   Future getFeedData(String uid, String feedType) async {
@@ -149,7 +149,7 @@ class _IoTDryFeedScreen extends State<IoTDryFeedScreen> {
                         onPressed: () {
                           Socket.connect(SERVER_IP, SERVER_PORT).then((socket) {
                             // 소켓 통신 코드
-                            socket.writeln('건식');
+                            socket.writeln('DRY_MEAL');
                             socket.writeln(feedCounter); // int
                           });
                         },
@@ -213,7 +213,7 @@ class _IoTDryFeedScreen extends State<IoTDryFeedScreen> {
                                         builder: (context) =>
                                             const DryFeedReserve())).then(
                                   (value) {
-                                    getFeedData(_currentUser.uid, '건식');
+                                    getFeedData(_currentUser.uid, 'DRY_MEAL');
                                   },
                                 );
                               },
