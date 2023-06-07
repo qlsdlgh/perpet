@@ -151,6 +151,7 @@ class _IoTDryFeedScreen extends State<IoTDryFeedScreen> {
                             // 소켓 통신 코드
                             socket.writeln('DRY_MEAL');
                             socket.writeln(feedCounter); // int
+                            socket.close();
                           });
                         },
                         style: ButtonStyle(
