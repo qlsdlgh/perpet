@@ -54,7 +54,6 @@ def Rpi_Stop():
 def Server_Close(client_socket):
     client_socket.close()
 
-
 def Capture_And_Send_Frame():
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
@@ -72,7 +71,6 @@ def Capture_And_Send_Frame():
         message = struct.pack(">L", len(data)) + data
         client_socket.sendall(message)
         print(len(message))   
-
 
 # ------------ 서버 통신 ------------
 def Recv_Control():
@@ -119,7 +117,7 @@ def Control_Rpi(data):
                 sleep(2)
                 servo_meal.ChangeDutyCycle(0)
                 sleep(0.5)
-        threading.Thread(traget=perform_delayed_wet_meal).start()
+        threading.Thread(target=perform_delayed_wet_meal).start()
 
     elif data == b"DELAYED_WET_MEAL":
         delay_time = client_socket.recv(1024)
@@ -134,7 +132,7 @@ def Control_Rpi(data):
                 sleep(0.5)
                 servo_bottom.ChangeDutyCycle(0)
                 sleep(0.5)
-        threading.Thread(traget=perform_delayed_wet_meal).start()
+        threading.Thread(target=perform_delayed_wet_meal).start()
 
     client_socket.sendall(data)
 
