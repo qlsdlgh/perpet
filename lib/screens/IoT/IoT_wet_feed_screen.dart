@@ -151,6 +151,7 @@ class _IoTWetFeedScreen extends State<IoTWetFeedScreen> {
                             // 소켓 통신 코드
                             socket.writeln('습식');
                             socket.writeln(feedCounter); // int
+                            socket.close();
                           });
                         },
                         style: ButtonStyle(
