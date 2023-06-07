@@ -41,7 +41,7 @@ class _WetFeedReserveState extends State<WetFeedReserve> {
       'reserve_time': dateFormat,
       'reserve_user_id': _currentUser.uid,
       'feed_count': count,
-      'feed_type': '습식',
+      'feed_type': 'WET_MEAL',
     });
 
     // 예약 코드 여기 작성
