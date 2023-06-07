@@ -117,7 +117,7 @@ def Control_Rpi(data):
                 sleep(2)
                 servo_meal.ChangeDutyCycle(0)
                 sleep(0.5)
-        threading.Thread(target=perform_delayed_wet_meal).start()
+        threading.Thread(target=perform_delayed_dry_meal).start()
 
     elif data == b"DELAYED_WET_MEAL":
         delay_time = client_socket.recv(1024)
