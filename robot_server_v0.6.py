@@ -1,12 +1,11 @@
-# 0.5
-# 최종
+# 0.6
+# 진짜 최종 예약까지 추가함
 
 import RPi.GPIO as GPIO
 import socket
 import cv2
 import numpy as np
 from time import sleep
-import pickle
 import struct
 
 # ------------------- 초기 변수 설정 -------------------
@@ -49,7 +48,6 @@ def Rpi_Stop():
     servo_cap.stop(0)
     servo_meal.stop(0)
     servo_bottom.stop(0)
-    speaker_pwm.stop(0)
     GPIO.cleanup()
 
 def Server_Close(client_socket):
@@ -64,40 +62,44 @@ def Capture_And_Send_Frame():
         ret, frame = cap.read()
         if not ret:
             print("Failed to capture frame")
+            sleep(0.1)
             continue
         frame = cv2.resize(frame, (320, 240))
-        data = pickle.dumps(frame)
+        result, frame = cv2.imencode('.jpg', frame)
+        data = bytearray(frame)
         message = struct.pack(">L", len(data)) + data
         client_socket.sendall(message)
-        
+        print(len(message))   
 
 # ------------ 서버 통신 ------------
 def Recv_Control():
     data = client_socket.recv(1024)
+    data = data.decode()
     return data
 
 def Control_Rpi(data):
     print(data)
-    
-    if data == b"WC_L":# 웹캠 좌회전
+    delay_time = 0
+    count = 0
+    if data == "WC_L":# 웹캠 좌회전
         servo_cap.ChangeDutyCycle(7.5)
-    elif data == b"WC_R": # 웹캠 우회전
+    elif data == "WC_R": # 웹캠 우회전
         servo_cap.ChangeDutyCycle(4)
-    elif data == b"WC_S": # 웹캠 정지
+    elif data == "WC_S": # 웹캠 정지
         servo_cap.ChangeDutyCycle(0)
-    elif data == b"WC": # 웹캠 화면 송출, 카메라 모듈 사용
+    elif data == "WC": # 웹캠 화면 송출, 카메라 모듈 사용
         Capture_And_Send_Frame()
-    elif data == b"DRY_MEAL": # 건식 급식기 회전 (1회)
+    elif data == "DRY_MEAL": # 건식 급식기 회전 (1회)
         data = client_socket.recv(1024)
-        data = int(data.decode())
+        data = int(data)
         for p in range(data):
             servo_meal.ChangeDutyCycle(2)
             sleep(2)
             servo_meal.ChangeDutyCycle(0)
             sleep(0.5)
-    elif data == b"WET_MEAL": # 습식 급식기 회전 (1칸)
+    elif data == "WET_MEAL": # 습식 급식기 회전 (1칸)
         data = client_socket.recv(1024)
-        data = int(data.decode())
+        data = int(data)
         for p in range(data):
             servo_bottom.ChangeDutyCycle(2)
             sleep(0.5)
